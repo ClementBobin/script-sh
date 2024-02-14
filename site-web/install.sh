@@ -84,6 +84,7 @@ update_virtualhost() {
 # Copy required files to destination paths
 for ((i = 0; i < ${#path_source[@]}; i++)); do
   cp "${path_source[i]}" "${path_destination[i]}"
+  print_message "cp ${path_source[i]} ${path_destination[i]}"
 done
 
 # Display success message
@@ -122,7 +123,7 @@ for ((i=0; i<${#sites[@]}; i++)); do
 done
 
 # Prompt user for username and set up Apache basic authentication
-auth=$(zenity --entry --title="Apache Basic Authentication" --text="Enter username:")
+auth=$(prompt_user "Enter username for basic authentication: ")
 htpasswd -c /etc/apache2/.htpasswd "$auth"
 
 # Start Apache service
