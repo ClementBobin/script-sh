@@ -92,7 +92,7 @@ main() {
 
   # Array to store options
   options=("FTP" "LAMP" "Website SSL")
-  paths=("FTP" "LAMP" "TD site-web ssl cloud")
+  paths=("FTP" "LAMP" "site-web")
 
   # Array to store selected options
   selected_options=()
