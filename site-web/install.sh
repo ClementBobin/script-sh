@@ -3,8 +3,8 @@
 # Define variables
 path_source=("index.html" "cible.php" "000-default.conf" "apache2.conf")
 path_destination=("/var/www/html" "/var/www/html" "/etc/apache2/sites-enabled/" "/etc/apache2/")
-sites=("site1" "site2")
-domains=("www.site1.fr" "www.site2.fr")
+sites=("test1" "test2")
+domains=("www.test1.fr" "www.test2.fr")
 web_root="/var/www/html"
 
 # Function to display messages in color
@@ -26,7 +26,7 @@ prompt_user() {
 
 # Function to create directories
 create_directory() {
-  sudo mkdir -p "$1"
+  mkdir -p "$1"
 }
 
 # Function to create HTML pages
@@ -73,8 +73,8 @@ update_virtualhost() {
 
   if file_exists "$virtualhost_file"; then
     print_message "Updating VirtualHost configuration for $domain..."
-    sudo sed -i "s|^SSLCertificateFile.*|SSLCertificateFile $ssl_cert|" "$virtualhost_file"
-    sudo sed -i "s|^SSLCertificateKeyFile.*|SSLCertificateKeyFile $ssl_key|" "$virtualhost_file"
+    #sed -i "s|^SSLCertificateFile.*|SSLCertificateFile $ssl_cert|" "$virtualhost_file"
+    #sed -i "s|^SSLCertificateKeyFile.*|SSLCertificateKeyFile $ssl_key|" "$virtualhost_file"
     print_message "VirtualHost configuration updated successfully."
   else
     print_message "Error: VirtualHost configuration file not found for $domain."
@@ -92,9 +92,9 @@ print_message "Required files are present."
 
 # Install necessary software packages
 if prompt_user "Do you want to install necessary software packages (e.g., Apache, PHP)?"; then
-  sudo apt-get update -y
-  sudo apt-get install -y apache2 php --fix-missing
-  sudo apt-get update -y
+  apt-get update -y
+  apt-get install -y apache2 php --fix-missing
+  apt-get update -y
 
   print_message "Software packages installed."
 else
@@ -119,7 +119,7 @@ done
 # Create Apache virtual host configurations
 for ((i=0; i<${#sites[@]}; i++)); do
   create_virtual_host "${sites[i]}" "${domains[i]}" "$web_root/${sites[i]}"
-  sudo a2ensite "${sites[i]}.conf"
+  a2ensite "${sites[i]}.conf"
 done
 
 # Prompt user for username and set up Apache basic authentication
@@ -127,7 +127,7 @@ auth=$(prompt_user "Enter username for basic authentication: ")
 htpasswd -c /etc/apache2/.htpasswd "$auth"
 
 # Start Apache service
-sudo systemctl start apache2
+systemctl start apache2
 
 # Display completion message
 print_message "Configuration tasks completed."
