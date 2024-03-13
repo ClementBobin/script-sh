@@ -26,7 +26,7 @@ prompt_user() {
 
 # Function to create directories
 create_directory() {
-  mkdir -p "$1"
+  sudo mkdir -p "$1"
 }
 
 # Function to create HTML pages
@@ -83,7 +83,7 @@ update_virtualhost() {
 
 # Copy required files to destination paths
 for ((i = 0; i < ${#path_source[@]}; i++)); do
-  cp "${path_source[i]}" "${path_destination[i]}"
+  sudo cp "${path_source[i]}" "${path_destination[i]}"
   print_message "cp ${path_source[i]} ${path_destination[i]}"
 done
 
@@ -92,9 +92,9 @@ print_message "Required files are present."
 
 # Install necessary software packages
 if prompt_user "Do you want to install necessary software packages (e.g., Apache, PHP)?"; then
-  apt-get update -y
-  apt-get install -y apache2 php --fix-missing
-  apt-get update -y
+  sudo apt-get update -y
+  sudo apt-get install -y apache2 php --fix-missing
+  sudo apt-get update -y
 
   print_message "Software packages installed."
 else
@@ -119,15 +119,15 @@ done
 # Create Apache virtual host configurations
 for ((i=0; i<${#sites[@]}; i++)); do
   create_virtual_host "${sites[i]}" "${domains[i]}" "$web_root/${sites[i]}"
-  a2ensite "${sites[i]}.conf"
+  sudo a2ensite "${sites[i]}.conf"
 done
 
 # Prompt user for username and set up Apache basic authentication
 auth=$(prompt_user "Enter username for basic authentication: ")
-htpasswd -c /etc/apache2/.htpasswd "$auth"
+sudo htpasswd -c /etc/apache2/.htpasswd "$auth"
 
 # Start Apache service
-systemctl start apache2
+sudo systemctl start apache2
 
 # Display completion message
 print_message "Configuration tasks completed."
