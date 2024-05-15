@@ -91,8 +91,8 @@ main() {
   fi
 
   # Array to store options
-  options=("FTP" "LAMP" "Website SSL")
-  paths=("FTP" "LAMP" "site-web")
+  options=("FTP" "LAMP" "Website SSL" "SSH Samba")
+  paths=("FTP" "LAMP" "site-web" "ssh-sambaa")
 
   # Array to store selected options
   selected_options=()
