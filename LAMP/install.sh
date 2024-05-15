@@ -66,8 +66,8 @@ install_phpmyadmin() {
 
 # Function to change permissions for $web_root
 change_permissions() {
-  sudo chown -R pi:www-data "$web_root"
-  sudo chmod -R 770 "$web_root"
+  chown -R pi:www-data "$web_root"
+  chmod -R 770 "$web_root"
   print_message "Permissions for $web_root changed."
 }
 

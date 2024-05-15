@@ -20,11 +20,11 @@ prompt_user() {
 # Function to install vsftpd
 install_vsftpd() {
   if command -v apt &>/dev/null; then
-    sudo apt install vsftpd -y
+    apt install vsftpd -y
   elif command -v dnf &>/dev/null; then
-    sudo dnf install vsftpd -y
+    dnf install vsftpd -y
   elif command -v pacman &>/dev/null; then
-    sudo pacman -S vsftpd --noconfirm
+    pacman -S vsftpd --noconfirm
   else
     print_message "Unsupported package manager. Please install vsftpd manually."
     exit 1
@@ -34,8 +34,8 @@ install_vsftpd() {
 
 # Function to backup and create vsftpd configuration
 configure_vsftpd() {
-  sudo mv /etc/vsftpd.conf /etc/vsftpd.conf_orig
-  sudo tee /etc/vsftpd.conf > /dev/null <<EOF
+  mv /etc/vsftpd.conf /etc/vsftpd.conf_orig
+  tee /etc/vsftpd.conf > /dev/null <<EOF
 listen=NO
 listen_ipv6=YES
 anonymous_enable=NO
@@ -63,11 +63,11 @@ EOF
 # Function to update firewall rules
 update_firewall() {
   if command -v ufw &>/dev/null; then
-    sudo ufw allow from any to any port 20,21 proto tcp
+    ufw allow from any to any port 20,21 proto tcp
   elif command -v firewall-cmd &>/dev/null; then
-    sudo firewall-cmd --zone=public --permanent --add-service=ftp
+    firewall-cmd --zone=public --permanent --add-service=ftp
   elif command -v iptables &>/dev/null; then
-    sudo iptables -A INPUT -m state --state NEW,ESTABLISHED -m tcp -p tcp --dport 20,21 -j ACCEPT
+    iptables -A INPUT -m state --state NEW,ESTABLISHED -m tcp -p tcp --dport 20,21 -j ACCEPT
   else
     print_message "Firewall rules not updated. Please update manually."
   fi
@@ -76,20 +76,20 @@ update_firewall() {
 
 # Function to restart vsftpd
 restart_vsftpd() {
-  sudo systemctl restart vsftpd
+  systemctl restart vsftpd
   print_message "vsftpd restarted."
 }
 
 # Function to create an FTP user
 create_ftp_user() {
-  sudo useradd -m ftpuser
-  sudo passwd ftpuser
+  useradd -m ftpuser
+  passwd ftpuser
   print_message "FTP user created successfully."
 }
 
 # Function to create a test file in the FTP user's home directory
 create_test_file() {
-  sudo bash -c "echo FTP TESTING > /home/ftpuser/FTP-TEST"
+  bash -c "echo FTP TESTING > /home/ftpuser/FTP-TEST"
   print_message "Test file created in the FTP user's home directory."
 }
 

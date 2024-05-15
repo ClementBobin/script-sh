@@ -25,11 +25,11 @@ install_zenity() {
     if [[ "$response" =~ ^[Yy]$ ]]; then
       # Install Zenity based on the package manager of the system
       if command -v apt-get &>/dev/null; then
-        sudo apt-get install zenity
+        apt-get install zenity
       elif command -v yum &>/dev/null; then
-        sudo yum install zenity
+        yum install zenity
       elif command -v pacman &>/dev/null; then
-        sudo pacman -S zenity
+        pacman -S zenity
       elif command -v nix-shell &>/dev/null; then
         nix-shell -p gnome.zenity
       else
