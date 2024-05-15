@@ -3,8 +3,8 @@
 # Define variables
 path_source=("index.html" "cible.php" "000-default.conf" "apache2.conf")
 path_destination=("/var/www/html" "/var/www/html" "/etc/apache2/sites-enabled/" "/etc/apache2/")
-sites=("site1" "site2")
-domains=("www.site1.fr" "www.site2.fr")
+sites=("test1" "test2")
+domains=("www.test1.fr" "www.test2.fr")
 web_root="/var/www/html"
 
 # Function to display messages in color
@@ -73,8 +73,8 @@ update_virtualhost() {
 
   if file_exists "$virtualhost_file"; then
     print_message "Updating VirtualHost configuration for $domain..."
-    sudo sed -i "s|^SSLCertificateFile.*|SSLCertificateFile $ssl_cert|" "$virtualhost_file"
-    sudo sed -i "s|^SSLCertificateKeyFile.*|SSLCertificateKeyFile $ssl_key|" "$virtualhost_file"
+    #sed -i "s|^SSLCertificateFile.*|SSLCertificateFile $ssl_cert|" "$virtualhost_file"
+    #sed -i "s|^SSLCertificateKeyFile.*|SSLCertificateKeyFile $ssl_key|" "$virtualhost_file"
     print_message "VirtualHost configuration updated successfully."
   else
     print_message "Error: VirtualHost configuration file not found for $domain."
@@ -83,7 +83,7 @@ update_virtualhost() {
 
 # Copy required files to destination paths
 for ((i = 0; i < ${#path_source[@]}; i++)); do
-  cp "${path_source[i]}" "${path_destination[i]}"
+  sudo cp "${path_source[i]}" "${path_destination[i]}"
   print_message "cp ${path_source[i]} ${path_destination[i]}"
 done
 
@@ -124,7 +124,7 @@ done
 
 # Prompt user for username and set up Apache basic authentication
 auth=$(prompt_user "Enter username for basic authentication: ")
-htpasswd -c /etc/apache2/.htpasswd "$auth"
+sudo htpasswd -c /etc/apache2/.htpasswd "$auth"
 
 # Start Apache service
 sudo systemctl start apache2
